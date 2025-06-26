@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>scooter geolocation</h1>
+<p id="demo"></p>
+
+<script>
+const x = document.getElementById("demo");
+let time = 1;
+
+function getLocation() {
+  if (navigator.geolocation) {
+    if(time == 1) {
+       x.innerHTML = "";
+    }
+    navigator.geolocation.getCurrentPosition(success, error);
+  } else {
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+function success(position) {
+  x.innerHTML = (time == 1 ? "" : x.innerHTML + "; ") + position.coords.latitude + "," + position.coords.longitude;
+  time += 1;
+}
+
+function error() {
+  alert("Sorry, no position available.");
+}
+
+setInterval(getLocation, 2000);
+</script>
+
+</body>
+</html>
