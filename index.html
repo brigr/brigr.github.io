@@ -2,16 +2,24 @@
 <html>
 <body>
 <h1>scooter geolocation</h1>
+<input type="button" id="record" onclick="enablerecord(true); myinterval = setInterval(getLocation, 1500)" value="start">
+<input type="button" id="reset" onclick="clearInterval(myinterval); enablerecord(false)" value="stop">
 <p id="demo"></p>
 
 <script>
 const x = document.getElementById("demo");
+
 let time = 1;
+
+function enablerecord(do_disable) {
+    document.getElementById("record").disabled = do_disable;
+}
 
 function getLocation() {
   if (navigator.geolocation) {
     if(time == 1) {
        x.innerHTML = "";
+       document.getElementById("record").enabled = false;
     }
     navigator.geolocation.getCurrentPosition(success, error);
   } else {
@@ -28,7 +36,6 @@ function error() {
   alert("Sorry, no position available.");
 }
 
-setInterval(getLocation, 500);
 </script>
 
 </body>
