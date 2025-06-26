@@ -31,7 +31,7 @@ function getLocation() {
 }
 
 function success(position) {
-  x.innerHTML = (time == 1 ? "" : x.innerHTML + "<br>") + position.coords.latitude + "," + position.coords.longitude;
+  x.innerHTML = (time == 1 ? "" : x.innerHTML + "<br>") + position.coords.latitude + "," + position.coords.longitude + "," + time;
   time += 1;
 }
 
