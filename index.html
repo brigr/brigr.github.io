@@ -2,17 +2,20 @@
 <html>
 <body>
 <h1>scooter geolocation</h1>
-<input type="button" id="record" onclick="enablerecord(true); myinterval = setInterval(getLocation, 1500)" value="start">
-<input type="button" id="reset" onclick="clearInterval(myinterval); enablerecord(false)" value="stop">
+<input type="button" id="record" onclick="enablerecord(true); time=0; myinterval = setInterval(getLocation, 2000)" value="start">
+<input type="button" id="reset" onclick="clearInterval(myinterval); enablerecord(false); alert('Stopped recording GPS after '+time+' recordings.');" value="stop">
 <p id="demo"></p>
 
 <script>
 const x = document.getElementById("demo");
 
-let time = 1;
+let time = 0;
 
 function enablerecord(do_disable) {
     document.getElementById("record").disabled = do_disable;
+    if (do_disable == true) {
+        x.innerHTML = "";
+    }
 }
 
 function getLocation() {
