@@ -2,19 +2,20 @@
 <html>
 <body>
 <h1>scooter geolocation</h1>
+<form name="main">
 <input type="button" id="record" onclick="enablerecord(true); time=0; myinterval = setInterval(getLocation, 2000)" value="start">
 <input type="button" id="reset" onclick="clearInterval(myinterval); enablerecord(false); alert('Stopped recording GPS after '+time+' recordings.');" value="stop"> 
-<input type="button" id="wakebutton" value="">
-Reacquire lock <input type="checkbox" id="reacquire"><p id="acquirestat"></p>
+<input type="button" id="wakebutton" name="wakebutton">
+Reacquire lock <input type="checkbox" name="reacquire" id="reacquire"><p id="acquirestat"></p>
+</form>
 <p id="demo"></p>
-
 <script>
 // wake
 console.clear();
 
 const statusElem = document.getElementById("acquirestat");
-const wakeButton = document.getElementById("wakebutton");
-const reaquireCheck = document.getElementById("reacquire");
+const wakeButton = document.main.wakebutton;
+const reaquireCheck = document.main.reacquire;
 
 let wakeButtonName = '';
 
@@ -22,7 +23,7 @@ let wakeButtonName = '';
 const changeUI = (status = 'acquired') => {
   const acquired = status === 'acquired' ? true : false;
   wakeButtonName = acquired ? 'on' : 'off';
-  wakeButton.value = `Turn Wake Lock ${acquired ? 'OFF' : 'ON'}`;
+  wakeButton.innerHTML = `Turn Wake Lock ${acquired ? 'OFF' : 'ON'}`;
   statusElem.innerHTML = `Wake Lock ${acquired ? 'is active!' : 'has been released.'}`;
 }
 
@@ -37,13 +38,15 @@ if ('wakeLock' in navigator) {
   statusElem.innerHTML = 'Wake lock is not supported by this browser.';
 }
 
-if (isFeatSupported) {
+if (isFeatSupported == true) {
   // create a reference for the wake lock
   let wakeLock = null;
 
   // create an async function to request a wake lock
   const requestWakeLock = async () => {
     try {
+      wakeButtonName = 'on';
+      
       wakeLock = await navigator.wakeLock.request('screen');
 
       // change up our interface to reflect wake lock active
@@ -57,11 +60,11 @@ if (isFeatSupported) {
         // if wake lock is released alter the button accordingly
         changeUI('released');
       });
-
+      
     } catch (err) {
       // if wake lock request fails - usually system related, such as battery
       wakeButtonName = 'off';
-      wakeButton.value = 'Turn Wake Lock ON';
+      wakeButton.innerHTML = 'Turn Wake Lock ON';
       statusElem.innerHTML = `${err.name}, ${err.message}`;
 
     }
@@ -99,7 +102,7 @@ if (isFeatSupported) {
 // geolocation
 const x = document.getElementById("demo");
 
-let time = 0;
+let timec = 0;
 
 function enablerecord(do_disable) {
     document.getElementById("record").disabled = do_disable;
@@ -110,7 +113,7 @@ function enablerecord(do_disable) {
 
 function getLocation() {
   if (navigator.geolocation) {
-    if(time == 1) {
+    if(timec == 1) {
        x.innerHTML = "";
        document.getElementById("record").enabled = false;
     }
@@ -121,38 +124,16 @@ function getLocation() {
 }
 
 function success(position) {
-  x.innerHTML = (time == 1 ? "" : x.innerHTML + "<br>") + position.coords.latitude + "," + position.coords.longitude + "," + time;
-  time += 1;
+  x.innerHTML = (timec == 1 ? "" : x.innerHTML + "<br>") + position.coords.latitude + "," + position.coords.longitude + "," + timec;
+  timec += 1;
 }
 
 function error() {
   alert("Sorry, no position available.");
 }
 
-let wakeLock = null;
-
-async function requestWakeLock() {
-  try {
-    wakeLock = await navigator.wakeLock.request('screen');
-    console.log('Wake Lock is active');
-
-    wakeLock.addEventListener('release', () => {
-      console.log('Wake Lock was released');
-    });
-  } catch (err) {
-    console.error(`${err.name}, ${err.message}`);
-  }
-}
-
-// Optional: re-request lock on visibility change
-document.addEventListener('visibilitychange', () => {
-  if (wakeLock !== null && document.visibilityState === 'visible') {
-    requestWakeLock();
-  }
-});
-
-
 </script>
+
 
 </body>
 </html>
