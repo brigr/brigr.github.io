@@ -5,100 +5,11 @@
 <form name="main">
 <input type="button" id="record" value="start">
 <input type="button" id="reset" value="stop"> 
-<input type="button" id="wakebutton" name="wakebutton">
+<input type="button" id="wakebutton" name="wakebutton" value="Turn Wake Lock ON">
 Reacquire lock <input type="checkbox" name="reacquire" id="reacquire"><p id="acquirestat"></p>
 </form>
 <p id="demo"></p>
 <script>
-// wake
-console.clear();
-
-const statusElem = document.getElementById("acquirestat");
-const wakeButton = document.main.wakebutton;
-const reaquireCheck = document.main.reacquire;
-
-let wakeButtonName = '';
-
-// change button and status if wakelock becomes aquired or is released
-const changeUI = (status = 'acquired') => {
-  const acquired = status === 'acquired' ? true : false;
-  wakeButtonName = acquired ? 'on' : 'off';
-  wakeButton.innerHTML = `Turn Wake Lock ${acquired ? 'OFF' : 'ON'}`;
-  statusElem.innerHTML = `Wake Lock ${acquired ? 'is active!' : 'has been released.'}`;
-}
-
-// test support
-let isFeatSupported = false;
-
-if ('wakeLock' in navigator) {
-  isFeatSupported = true;
-  statusElem.innerHTML = 'Screen Wake Lock API supported 🎉';
-} else {
-  wakeButton.disabled = true;
-  statusElem.innerHTML = 'Wake lock is not supported by this browser.';
-}
-
-if (isFeatSupported == true) {
-  // create a reference for the wake lock
-  let wakeLock = null;
-
-  // create an async function to request a wake lock
-  const requestWakeLock = async () => {
-    try {
-      wakeLock = await navigator.wakeLock.request('screen');
-
-      // change up our interface to reflect wake lock active
-      changeUI();
-
-      // listen for our release event
-      wakeLock.onrelease = function(ev) {
-        console.log(ev);
-      }
-      wakeLock.addEventListener('release', () => {
-        // if wake lock is released alter the button accordingly
-        changeUI('released');
-      });
-      
-      wakeButtonName = 'on';
-
-    } catch (err) {
-      // if wake lock request fails - usually system related, such as battery
-      wakeButton.innerHTML = 'Turn Wake Lock ON';
-      statusElem.innerHTML = `${err.name}, ${err.message}`;
-
-      wakeButtonName = 'off';
-
-    }
-  } // requestWakeLock()
-
-  // if we click our button
-  wakeButton.addEventListener('click', () => {
-    // if wakelock is off request it
-    if (wakeButtonName === 'off') {
-      requestWakeLock()
-    } else { // if it's on release it
-      wakeLock.release()
-        .then(() => {
-          wakeLock = null;
-        })
-    }
-  })
-
-  const handleVisibilityChange = () => {
-    if (wakeLock !== null && document.visibilityState === 'visible') {
-      requestWakeLock();
-    }
-  }
-
-  reaquireCheck.addEventListener('change', () => {
-    if (reaquireCheck.checked) {
-      document.addEventListener('visibilitychange', handleVisibilityChange);
-    } else {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    }
-  });
-
-}
 
 // geolocation
 const x = document.getElementById("demo");
@@ -148,7 +59,7 @@ resetBtn.addEventListener("click", () => {
 });
 
 </script>
-
+<script src="script.js"></script>
 
 </body>
 </html>
