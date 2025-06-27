@@ -16,10 +16,12 @@ const statusElem = document.getElementById("acquirestat");
 const wakeButton = document.getElementById("wakebutton");
 const reaquireCheck = document.getElementById("reacquire");
 
+let wakeButtonName = ''
+  
 // change button and status if wakelock becomes aquired or is released
 const changeUI = (status = 'acquired') => {
   const acquired = status === 'acquired' ? true : false;
-  wakeButton.name = acquired ? 'on' : 'off';
+  wakeButtonName = acquired ? 'on' : 'off';
   wakeButton.value = `Turn Wake Lock ${acquired ? 'OFF' : 'ON'}`;
   statusElem.innerHTML = `Wake Lock ${acquired ? 'is active!' : 'has been released.'}`;
 }
@@ -58,7 +60,7 @@ if (isFeatSupported) {
 
     } catch (err) {
       // if wake lock request fails - usually system related, such as battery
-      wakeButton.name = 'off';
+      wakeButtonName = 'off';
       wakeButton.value = 'Turn Wake Lock ON';
       statusElem.innerHTML = `${err.name}, ${err.message}`;
 
