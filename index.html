@@ -3,8 +3,8 @@
 <body>
 <h1>scooter geolocation</h1>
 <form name="main">
-<input type="button" id="record" onclick="enablerecord(true); time=0; myinterval = setInterval(getLocation, 2000)" value="start">
-<input type="button" id="reset" onclick="clearInterval(myinterval); enablerecord(false); alert('Stopped recording GPS after '+time+' recordings.');" value="stop"> 
+<input type="button" id="record" value="start">
+<input type="button" id="reset" value="stop"> 
 <input type="button" id="wakebutton" name="wakebutton">
 Reacquire lock <input type="checkbox" name="reacquire" id="reacquire"><p id="acquirestat"></p>
 </form>
@@ -45,8 +45,6 @@ if (isFeatSupported == true) {
   // create an async function to request a wake lock
   const requestWakeLock = async () => {
     try {
-      wakeButtonName = 'on';
-      
       wakeLock = await navigator.wakeLock.request('screen');
 
       // change up our interface to reflect wake lock active
@@ -61,11 +59,14 @@ if (isFeatSupported == true) {
         changeUI('released');
       });
       
+      wakeButtonName = 'on';
+
     } catch (err) {
       // if wake lock request fails - usually system related, such as battery
-      wakeButtonName = 'off';
       wakeButton.innerHTML = 'Turn Wake Lock ON';
       statusElem.innerHTML = `${err.name}, ${err.message}`;
+
+      wakeButtonName = 'off';
 
     }
   } // requestWakeLock()
@@ -115,7 +116,7 @@ function getLocation() {
   if (navigator.geolocation) {
     if(timec == 1) {
        x.innerHTML = "";
-       document.getElementById("record").enabled = false;
+       document.getElementById("record").disabled = true;
     }
     navigator.geolocation.getCurrentPosition(success, error);
   } else { 
@@ -131,6 +132,20 @@ function success(position) {
 function error() {
   alert("Sorry, no position available.");
 }
+
+const recordBtn = document.getElementById("record");
+recordBtn.addEventListener("click", () => {
+  enablerecord(true);
+  time = 0;
+  myinterval = setInterval(getLocation, 2000);
+});
+
+const resetBtn = document.getElementById("reset");
+resetBtn.addEventListener("click", () => {
+  clearInterval(myinterval);
+  enablerecord(false);
+  alert('Stopped recording GPS after '+time+' recordings.');
+});
 
 </script>
 
