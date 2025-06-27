@@ -17,7 +17,7 @@ const wakeButton = document.getElementById("wakebutton");
 const reaquireCheck = document.getElementById("reacquire");
 
 let wakeButtonName = ''
-  
+
 // change button and status if wakelock becomes aquired or is released
 const changeUI = (status = 'acquired') => {
   const acquired = status === 'acquired' ? true : false;
@@ -70,7 +70,7 @@ if (isFeatSupported) {
   // if we click our button
   wakeButton.addEventListener('click', () => {
     // if wakelock is off request it
-    if (wakeButton.value === 'off') {
+    if (wakeButtonName === 'off') {
       requestWakeLock()
     } else { // if it's on release it
       wakeLock.release()
