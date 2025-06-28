@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Phone Trail Tracker</title>
+    <style>
+      #map {
+        height: 100vh;
+        width: 100%;
+      }
+    </style>
+    <script>
+      let map;
+      let pathCoords = [];
+      let polyline;
+      let trailMarkers = [];
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+          center: { lat: 0, lng: 0 },
+          zoom: 16,
+          mapId: "529add4a773e9aff22e41da5" // required for Advanced Markers if used
+        });
+
+        polyline = new google.maps.Polyline({
+          path: pathCoords,
+          geodesic: true,
+          strokeColor: "#FF0000",
+          strokeOpacity: 1.0,
+          strokeWeight: 2,
+          map: map,
+        });
+
+        if ("geolocation" in navigator) {
+          navigator.geolocation.watchPosition(
+            (position) => {
+              const lat = position.coords.latitude;
+              const lng = position.coords.longitude;
+              const newLatLng = new google.maps.LatLng(lat, lng);
+
+              // Update the map center
+              map.panTo(newLatLng);
+
+              // Add marker
+              const marker = new google.maps.Marker({
+                position: newLatLng,
+                map: map,
+                icon: {
+                  path: google.maps.SymbolPath.CIRCLE,
+                  scale: 5,
+                  fillColor: "#00F",
+                  fillOpacity: 1,
+                  strokeColor: "#00F"
+                }
+              });
+              trailMarkers.push(marker);
+
+              // Update the path
+              pathCoords.push(newLatLng);
+              polyline.setPath(pathCoords);
+            },
+            (err) => {
+              console.error("Geolocation error:", err);
+            },
+            { enableHighAccuracy: true }
+          );
+        } else {
+          alert("Geolocation not supported.");
+        }
+      }
+    </script>
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDaHcyyMLSBNbxA-Q60PBh_Z5_1ahAE9V4&callback=initMap">
+    </script>
+  </head>
+  <body>
+    <div id="map"></div>
+  </body>
+</html>
