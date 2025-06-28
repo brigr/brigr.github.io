@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Scooter trails in Thessaloniki</title>
+  <link rel="stylesheet" type="text/css" href="style.css"/>
+  <script async defer type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDaHcyyMLSBNbxA-Q60PBh_Z5_1ahAE9V4&callback=initMap&libraries=places"></script>
+  <script>
+	function initMap() {
+	   const map = new google.maps.Map(document.getElementById("mappp"), {
+	     center: { lat: -34.397, lng: 150.644 },
+	     zoom: 8,
+	   });
+	}
+  </script>
+
+  <script type="javascript">
+// geolocation
+const x = document.getElementById("demo");
+
+let timec = 0;
+
+function enablerecord(do_disable) {
+    document.getElementById("record").disabled = do_disable;
+    if (do_disable == true) {
+        x.innerHTML = "";
+    }
+}
+
+function getLocation() {
+  if (navigator.geolocation) {
+    if(timec == 1) {
+       x.innerHTML = "";
+       document.getElementById("record").disabled = true;
+    }
+    navigator.geolocation.getCurrentPosition(success, error);
+  } else { 
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+function success(position) {
+  //x.innerHTML = (timec == 1 ? "" : x.innerHTML + "<br>") + position.coords.latitude + "," + position.coords.longitude + "," + timec;
+  timec += 1;
+
+  const map = new google.maps.Map(document.getElementById("mappp"), {
+             center: { lat: position.coords.latitude, lng: position.coords.longitude },
+             zoom: 8,
+           });
+}
+
+function error() {
+  alert("Sorry, no position available.");
+}
+
+const recordBtn = document.getElementById("record");
+recordBtn.addEventListener("click", () => {
+  enablerecord(true);
+  time = 0;
+  myinterval = setInterval(getLocation, 2000);
+});
+
+const resetBtn = document.getElementById("reset");
+resetBtn.addEventListener("click", () => {
+  clearInterval(myinterval);
+  enablerecord(false);
+  alert('Stopped recording GPS after '+time+' recordings.');
+});
+
+</script>
+</head>
+<body>
+<h1>scooter geolocation</h1>
+<form name="main">
+<input type="button" id="record" value="start">
+<input type="button" id="reset" value="stop"> 
+<input type="button" id="wakebutton" name="wakebutton" value="Turn Wake Lock ON">
+Reacquire lock <input type="checkbox" name="reacquire" id="reacquire"><p id="acquirestat"></p>
+</form>
+<div id="mappp" class="column"></div>
+</body>
+</html>
