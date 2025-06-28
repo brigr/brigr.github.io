@@ -14,10 +14,10 @@
         const initialLocation = { lat: 37.7749, lng: -122.4194 }; // San Francisco
         gmap = new google.maps.Map(document.getElementById("mappp"), {
           center: initialLocation,
-          zoom: 8,
+          zoom: 18,
         });
         
-        if(glat != null && glon != null) {
+        if(glat !== null && glon !== null) {
            zoomToLocation(glat,glon,18);
         }
       }
