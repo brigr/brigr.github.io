@@ -3,10 +3,12 @@
 <head>
   <title>Scooter trails in Thessaloniki</title>
   <link rel="stylesheet" type="text/css" href="style.css"/>
-  <script async defer type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDaHcyyMLSBNbxA-Q60PBh_Z5_1ahAE9V4&callback=initMap&libraries=places"></script>
+  <script async defer type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDaHcyyMLSBNbxA-Q60PBh_Z5_1ahAE9V4&callback=initMap&libraries=places"></script>
   <script>
+        let gmap = null;
+
 	function initMap() {
-	   const map = new google.maps.Map(document.getElementById("mappp"), {
+	   gmap = new google.maps.Map(document.getElementById("mappp"), {
 	     center: { lat: -34.397, lng: 150.644 },
 	     zoom: 8,
 	   });
@@ -41,11 +43,11 @@ function getLocation() {
 function success(position) {
   //x.innerHTML = (timec == 1 ? "" : x.innerHTML + "<br>") + position.coords.latitude + "," + position.coords.longitude + "," + timec;
   timec += 1;
-
-  const map = new google.maps.Map(document.getElementById("mappp"), {
-             center: { lat: position.coords.latitude, lng: position.coords.longitude },
-             zoom: 8,
-           });
+  
+  const marker = new AdvancedMarkerElement({
+      gmap,
+      position: { lat: position.coords.latitude, lng: position.coords.longitude },
+  });
 }
 
 function error() {
