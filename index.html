@@ -5,7 +5,9 @@
   <link rel="stylesheet" type="text/css" href="style.css"/>
   <script async defer type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDaHcyyMLSBNbxA-Q60PBh_Z5_1ahAE9V4&callback=initMap&libraries=places"></script>
     <script>
-      let gmap;
+      let gmap = null;
+      let glat = null;
+      let glon = null;
 
       function initMap() {
         // Initial center and zoom level
@@ -14,12 +16,23 @@
           center: initialLocation,
           zoom: 8,
         });
+        
+        if(glat != null && glon != null) {
+           zoomToLocation(glat,glon,18);
+        }
       }
 
       function zoomToLocation(lat, lng, zoomLevel) {
-        const location = new google.maps.LatLng(lat, lng);
-        gmap.setCenter(location);
-        gmap.setZoom(zoomLevel);
+       const location = new google.maps.LatLng(lat, lng);
+       
+       gmap.setCenter(location);
+       gmap.setZoom(zoomLevel);
+
+       if (!marker) {
+          marker = new google.maps.Marker({ position: location, gmap });
+       } else {
+          marker.setPosition(location);
+       }
       }
 
     </script>
@@ -53,7 +66,8 @@ function success(position) {
   //x.innerHTML = (timec == 1 ? "" : x.innerHTML + "<br>") + position.coords.latitude + "," + position.coords.longitude + "," + timec;
   timec += 1;
 
-  zoomToLocation(position.coords.latitude, position.coords.longitude, 12);
+  glat = position.coords.latitude;
+  glon = position.coords.longitude;
 }
 
 function error() {
