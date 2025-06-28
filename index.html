@@ -44,7 +44,7 @@ function success(position) {
   //x.innerHTML = (timec == 1 ? "" : x.innerHTML + "<br>") + position.coords.latitude + "," + position.coords.longitude + "," + timec;
   timec += 1;
   
-  const marker = new AdvancedMarkerElement({
+  marker = new AdvancedMarkerElement({
       gmap,
       position: { lat: position.coords.latitude, lng: position.coords.longitude },
   });
