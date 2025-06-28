@@ -6,8 +6,6 @@
   <script async defer type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDaHcyyMLSBNbxA-Q60PBh_Z5_1ahAE9V4&callback=initMap&libraries=places"></script>
     <script>
       let gmap = null;
-      let glat = null;
-      let glon = null;
 
       function initMap() {
         // Initial center and zoom level
@@ -16,10 +14,6 @@
           center: initialLocation,
           zoom: 18,
         });
-        
-        if(glat !== null && glon !== null) {
-           zoomToLocation(glat,glon,18);
-        }
       }
 
       function zoomToLocation(lat, lng, zoomLevel) {
@@ -38,38 +32,30 @@
     </script>
 
   <script type="javascript">
-// geolocation
-const x = document.getElementById("demo");
 
 let timec = 0;
 
 function enablerecord(do_disable) {
     document.getElementById("record").disabled = do_disable;
-    if (do_disable == true) {
-        x.innerHTML = "";
-    }
 }
 
 function getLocation() {
   if (navigator.geolocation) {
     if(timec == 1) {
-       x.innerHTML = "";
        document.getElementById("record").disabled = true;
     }
     navigator.geolocation.getCurrentPosition(success, error);
   } else { 
-    x.innerHTML = "Geolocation is not supported by this browser.";
   }
 }
 
 function success(position) {
-  //x.innerHTML = (timec == 1 ? "" : x.innerHTML + "<br>") + position.coords.latitude + "," + position.coords.longitude + "," + timec;
   timec += 1;
 
   glat = position.coords.latitude;
   glon = position.coords.longitude;
   
-  initMap();
+  zoomToLocation(glat, glon, 18);
 }
 
 function error() {
