@@ -5,8 +5,8 @@
   <link rel="stylesheet" type="text/css" href="style.css"/>
   <script async defer type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDaHcyyMLSBNbxA-Q60PBh_Z5_1ahAE9V4&callback=initMap&libraries=places"></script>
   <script>
-        let gmap = null;
-
+      let gmap = null;
+      
 	function initMap() {
 	   gmap = new google.maps.Map(document.getElementById("mappp"), {
 	     center: { lat: -34.397, lng: 150.644 },
@@ -40,14 +40,19 @@ function getLocation() {
   }
 }
 
+function zoomToLocation(lat, lng, zoomLevel) {
+        const location = new google.maps.LatLng(lat, lng);
+        map.setCenter(location);
+        map.setZoom(zoomLevel);
+}
+
 function success(position) {
   //x.innerHTML = (timec == 1 ? "" : x.innerHTML + "<br>") + position.coords.latitude + "," + position.coords.longitude + "," + timec;
   timec += 1;
+
+  const targetLocation = {lat: position.coords.latitude, lng: position.coords.longitude};
+  zoomToLocation(targetLocation.lat, targetLoction.lng, 12);
   
-  marker = new AdvancedMarkerElement({
-      gmap,
-      position: { lat: position.coords.latitude, lng: position.coords.longitude },
-  });
 }
 
 function error() {
