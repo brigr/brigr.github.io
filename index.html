@@ -4,16 +4,25 @@
   <title>Scooter trails in Thessaloniki</title>
   <link rel="stylesheet" type="text/css" href="style.css"/>
   <script async defer type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDaHcyyMLSBNbxA-Q60PBh_Z5_1ahAE9V4&callback=initMap&libraries=places"></script>
-  <script>
-      let gmap = null;
-      
-	function initMap() {
-	   gmap = new google.maps.Map(document.getElementById("mappp"), {
-	     center: { lat: -34.397, lng: 150.644 },
-	     zoom: 8,
-	   });
-	}
-  </script>
+    <script>
+      let gmap;
+
+      function initMap() {
+        // Initial center and zoom level
+        const initialLocation = { lat: 37.7749, lng: -122.4194 }; // San Francisco
+        gmap = new google.maps.Map(document.getElementById("mappp"), {
+          center: initialLocation,
+          zoom: 8,
+        });
+      }
+
+      function zoomToLocation(lat, lng, zoomLevel) {
+        const location = new google.maps.LatLng(lat, lng);
+        gmap.setCenter(location);
+        gmap.setZoom(zoomLevel);
+      }
+
+    </script>
 
   <script type="javascript">
 // geolocation
@@ -40,19 +49,11 @@ function getLocation() {
   }
 }
 
-function zoomToLocation(lat, lng, zoomLevel) {
-        const location = new google.maps.LatLng(lat, lng);
-        map.setCenter(location);
-        map.setZoom(zoomLevel);
-}
-
 function success(position) {
   //x.innerHTML = (timec == 1 ? "" : x.innerHTML + "<br>") + position.coords.latitude + "," + position.coords.longitude + "," + timec;
   timec += 1;
 
-  const targetLocation = {lat: position.coords.latitude, lng: position.coords.longitude};
-  zoomToLocation(targetLocation.lat, targetLoction.lng, 12);
-  
+  zoomToLocation(position.coords.latitude, position.coords.longitude, 12);
 }
 
 function error() {
