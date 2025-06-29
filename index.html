@@ -8,28 +8,59 @@
       let gmap = null;
       let gmarker = null;
       let wakeLock = null;
- 
+      let polyline = null;
+      let pathCoords = [];
+      let trailMarkers = [];
+       
       function initMap() {
         // Initial center and zoom level
-        const initialLocation = { lat: 37.7749, lng: -122.4194 }; // San Francisco
+        const initialLocation = { lat: 0, lng: 0 };
         gmap = new google.maps.Map(document.getElementById("mappp"), {
           center: initialLocation,
           zoom: 18,
           mapId: "529add4a773e9aff22e41da5"
         });
+        
+        polyline = new google.maps.Polyline({
+           path: pathCoords,
+           geodesic: true,
+           strokeColor: "#FF0000",
+           strokeOpacity: 1.0,
+           strokeWeight: 2,
+           map: gmap,
+        });
       }
 
       function zoomToLocation(lat, lng, zoomLevel) {
-       const location = new google.maps.LatLng(lat, lng);
-       const position = {lat: lat, lng: lng};
-       
-       gmap.setCenter(location);
-       gmap.setZoom(zoomLevel);
+	const location = new google.maps.LatLng(lat, lng);
+	const position = {lat: lat, lng: lng};
 
-       if (!gmarker) {
-          gmarker = new google.maps.marker.AdvancedMarkerElement({ map: gmap, position: {lat:lat,lng:lng}, title: "me!" });
-       }
-      }
+	//gmap.setCenter(location);
+	//gmap.setZoom(zoomLevel);
+
+	gmap.panTo(location);
+
+	//if (!gmarker) {
+	//   gmarker = new google.maps.marker.AdvancedMarkerElement({ map: gmap, position: {lat:lat,lng:lng}, title: "me!" });
+	//}
+
+	gmarker = new google.maps.Marker({
+	  position: location,
+	  map: gmap,
+	  icon: {
+	     path: google.maps.SymbolPath.CIRCLE,
+	     scale: 5,
+	     fillColor: "#00F",
+	     fillOpacity: 1,
+	     strokeColor: "#00F"
+	  }
+	});
+
+	trailMarkers.push(marker);
+
+	pathCoords.push(location);
+	polyline.setPath(pathCoords);
+     }
 
     </script>
 
