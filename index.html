@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Scooter trails in Thessaloniki</title>
+  <title>Thessaloniki scooter trails</title>
   <link rel="stylesheet" type="text/css" href="style.css"/>
   <script async defer type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDaHcyyMLSBNbxA-Q60PBh_Z5_1ahAE9V4&callback=initMap&libraries=places,marker"></script>
     <script>
@@ -66,7 +66,7 @@
 
 </head>
 <body>
-<h1>scooter geolocation</h1>
+<h1>Scooter tracking</h1>
 <form name="main">
 <input type="button" id="record" value="start" onclick="enablerecord(true);timec = 0; myinterval = setInterval(getLocation, 2000);">
 <input type="button" id="reset" value="stop" onclick="clearInterval(myinterval); alert('Stopped recording GPS after '+timec+' recordings.'); enablerecord(false)"> 
