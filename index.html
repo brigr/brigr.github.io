@@ -66,9 +66,12 @@
 
 </head>
 <body>
+<audio id="myAudio">
+  <source src="snd_gamestart.mp3" type="audio/mpeg">
+</audio>
 <h1>Scooter tracking</h1>
 <form name="main">
-<input type="button" id="record" value="start" onclick="enablerecord(true);timec = 0; myinterval = setInterval(getLocation, 2000);">
+<input type="button" id="record" value="start" onclick="enablerecord(true); document.getElementById('myAudio').play();timec = 0; myinterval = setInterval(getLocation, 2000);">
 <input type="button" id="reset" value="stop" onclick="clearInterval(myinterval); alert('Stopped recording GPS after '+timec+' recordings.'); enablerecord(false)"> 
 <input type="button" id="wakebutton" name="wakebutton" value="Turn Wake Lock ON">
 Reacquire lock <input type="checkbox" name="reacquire" id="reacquire"><p id="acquirestat"></p>
